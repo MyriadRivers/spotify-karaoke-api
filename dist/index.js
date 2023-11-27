@@ -8,7 +8,7 @@ import { makeExecutableSchema } from '@graphql-tools/schema';
 import { WebSocketServer } from 'ws';
 import { useServer } from 'graphql-ws/lib/use/ws';
 import { PubSub, withFilter } from 'graphql-subscriptions';
-const PORT = 4000;
+const PORT = Number.parseInt(process.env.PORT) || 4000;
 const pubsub = new PubSub();
 const typeDefs = `#graphql
     # Lyrics internally should always be a JSON string
@@ -93,7 +93,7 @@ const app = express();
 const httpServer = createServer(app);
 const wsServer = new WebSocketServer({
     server: httpServer,
-    path: '/graphql'
+    path: '/'
 });
 const serverCleanup = useServer({ schema }, wsServer);
 const server = new ApolloServer({
@@ -112,7 +112,7 @@ const server = new ApolloServer({
     ]
 });
 await server.start();
-app.use("/graphql", cors(), express.json(), expressMiddleware(server));
+app.use("/", cors(), express.json(), expressMiddleware(server));
 httpServer.listen(PORT, () => {
     console.log(`Server listening on port http://localhost:${PORT}/graphql`);
 });
