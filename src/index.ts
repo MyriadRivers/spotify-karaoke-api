@@ -130,6 +130,6 @@ const server = new ApolloServer({
 await server.start();
 app.use("/graphql", cors<cors.CorsRequest>(), express.json(), expressMiddleware(server));
 
-httpServer.listen(PORT, () => {
-    console.log(`Server listening on port http://localhost:${PORT}/graphql`)
+httpServer.listen(Number.parseInt(process.env.PORT) || PORT, () => {
+    console.log(`Server listening on port http://localhost:${Number.parseInt(process.env.PORT) || PORT}/graphql`)
 });
