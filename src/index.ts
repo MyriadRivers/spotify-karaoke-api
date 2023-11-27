@@ -9,7 +9,7 @@ import { WebSocketServer } from 'ws';
 import { useServer } from 'graphql-ws/lib/use/ws'
 import { PubSub, withFilter } from 'graphql-subscriptions'
 
-const PORT = 4000;
+const LOCALPORT = 4000;
 
 const pubsub = new PubSub();
 
@@ -105,7 +105,7 @@ const httpServer = createServer(app);
 
 const wsServer = new WebSocketServer({
     server: httpServer,
-    path: '/graphql'
+    path: '/'
 });
 
 const serverCleanup = useServer({ schema }, wsServer);
@@ -128,8 +128,8 @@ const server = new ApolloServer({
 });
 
 await server.start();
-app.use("/graphql", cors<cors.CorsRequest>(), express.json(), expressMiddleware(server));
+app.use("/", cors<cors.CorsRequest>(), express.json(), expressMiddleware(server));
 
-httpServer.listen(Number.parseInt(process.env.PORT) || PORT, () => {
-    console.log(`Server listening on port http://localhost:${Number.parseInt(process.env.PORT) || PORT}/graphql`)
+httpServer.listen(Number.parseInt(process.env.PORT) || LOCALPORT, () => {
+    console.log(`Server listening on port http://localhost:${Number.parseInt(process.env.PORT) || LOCALPORT}/graphql`)
 });
