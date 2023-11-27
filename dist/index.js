@@ -114,5 +114,5 @@ const server = new ApolloServer({
 await server.start();
 app.use("/", cors(), express.json(), expressMiddleware(server));
 httpServer.listen(PORT, () => {
-    console.log(`Server listening on port http://localhost:${PORT}/graphql`);
+    console.log(`Server listening on port http://localhost:${PORT}`);
 });
