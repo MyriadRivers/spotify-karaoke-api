@@ -5,7 +5,7 @@ import cors from 'cors';
 import express from 'express';
 import { createServer } from 'http';
 import { makeExecutableSchema } from '@graphql-tools/schema';
-import { WebSocketServer } from 'ws';
+import { WebSocket, WebSocketServer } from 'ws';
 import { useServer } from 'graphql-ws/lib/use/ws'
 import { PubSub, withFilter } from 'graphql-subscriptions'
 
@@ -129,6 +129,20 @@ const server = new ApolloServer({
 
 await server.start();
 app.use("/", cors<cors.CorsRequest>(), express.json(), expressMiddleware(server));
+
+// Keep alive
+wsServer.on("connection", (ws: WebSocket) => {
+    const interval = setInterval(() => {
+        if (ws.OPEN) {
+            console.log("keep alive");
+            ws.ping();
+        }
+    }, 25000);
+
+    ws.on("close", () => {
+        clearInterval(interval);
+    });
+});
 
 httpServer.listen(PORT, () => {
     console.log(`Server listening on port http://localhost:${PORT}`)
