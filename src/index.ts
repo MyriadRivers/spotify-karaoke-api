@@ -131,18 +131,18 @@ await server.start();
 app.use("/", cors<cors.CorsRequest>(), express.json(), expressMiddleware(server));
 
 // Keep alive
-wsServer.on("connection", (ws: WebSocket) => {
-    const interval = setInterval(() => {
-        if (ws.OPEN) {
-            console.log("keep alive");
-            ws.ping();
-        }
-    }, 25000);
+// wsServer.on("connection", (ws: WebSocket) => {
+//     const interval = setInterval(() => {
+//         if (ws.OPEN) {
+//             console.log("keep alive");
+//             ws.ping();
+//         }
+//     }, 25000);
 
-    ws.on("close", () => {
-        clearInterval(interval);
-    });
-});
+//     ws.on("close", () => {
+//         clearInterval(interval);
+//     });
+// });
 
 httpServer.listen(PORT, () => {
     console.log(`Server listening on port http://localhost:${PORT}`)
